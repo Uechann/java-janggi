@@ -2,6 +2,7 @@ package domain.piece.strategy;
 
 import domain.board.Direction;
 import domain.piece.Piece;
+import domain.piece.Side;
 import domain.position.Position;
 
 import java.util.Map;
@@ -19,7 +20,15 @@ public class PawnMovingCondition implements MovingCondition {
         }
 
         Direction direction = directions.poll();
-        if (!(direction == Direction.UP || direction == Direction.LEFT || direction == Direction.RIGHT)) {
+        if (!(direction == Direction.UP || direction == Direction.LEFT
+                || direction == Direction.RIGHT || direction == Direction.DOWN)
+        ) {
+            return false;
+        }
+
+        Piece piece = state.get(startPosition);
+        if ((piece.isSameSide(Side.CHO) && direction == Direction.DOWN)
+                || (piece.isSameSide(Side.HAN) && direction == Direction.UP)) {
             return false;
         }
         return true;
