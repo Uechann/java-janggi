@@ -53,4 +53,8 @@ public final class Piece {
     public int hashCode() {
         return Objects.hash(side) + Objects.hash(pieceType);
     }
+
+    public boolean isGeneral() {
+        return pieceType == PieceType.GENERAL;
+    }
 }

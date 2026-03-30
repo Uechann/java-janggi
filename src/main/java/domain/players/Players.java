@@ -31,4 +31,15 @@ public class Players {
         if (currentTurn.isCho()) return choPlayer;
         return hanPlayer;
     }
+
+    public void playTurn(Board board, Move move) {
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.play(board, move);
+        currentTurn = currentTurn.next();
+    }
+
+    private Player getCurrentPlayer() {
+        if (currentTurn == Side.CHO) return choPlayer;
+        return hanPlayer;
+    }
 }
