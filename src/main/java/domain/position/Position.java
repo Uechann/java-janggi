@@ -21,6 +21,10 @@ public final class Position {
         return new Position(new Coordinate(row, column));
     }
 
+    public static Position rotate180from(Position position) {
+        return new Position(Coordinate.rotate180from(position.getRow(), position.getColumn()));
+    }
+
     private static void validateRange(int row, int column) {
         if (row < MIN_ROW || row > MAX_ROW || column < MIN_COLUMN || column > MAX_COLUMN) {
             throw new IllegalArgumentException("장기판 범위를 벗어났습니다.");
@@ -32,7 +36,7 @@ public final class Position {
     }
 
     public Position append(Direction direction) {
-        return Position.of(getRow() + direction.getdRow(), getColumn() + direction.getdColumn());
+        return Position.of(getRow() + direction.getDeltaRow(), getColumn() + direction.getDeltaColumn());
     }
 
     public int getRow() {

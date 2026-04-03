@@ -38,11 +38,10 @@ public class Board {
         Piece toPiece = state.get(to);
 
         validateMoveBySide(side, fromPiece, toPiece);
+        validateCanMove(from, to, side, fromPiece);
 
-        if (fromPiece.canMove(adjustStateBySide(side), adjustPositionBySide(side, from), adjustPositionBySide(side, to))) {
-            state.put(to, fromPiece);
-            state.remove(from);
-        }
+        state.put(to, fromPiece);
+        state.remove(from);
     }
 
     public void placePieces(Side side, Placement placement) {
@@ -60,8 +59,8 @@ public class Board {
     // ============= private method ==============
 
     private void placeDefaultPieceBy(Side side) {
-        if (side == Side.HAN) placeBySide(side, 10, -1);
-        if (side == Side.CHO) placeBySide(side, 1, 1);
+        if (side.isHan()) placeBySide(side, 10, -1);
+        if (side.isCho()) placeBySide(side, 1, 1);
     }
 
     private void placeBySide(Side side, int startRow, int dy) {
@@ -128,6 +127,12 @@ public class Board {
         validateCanCatchSameSidePiece(side, toPiece);
     }
 
+    private void validateCanMove(Position from, Position to, Side side, Piece fromPiece) {
+        if (!fromPiece.canMove(adjustStateBySide(side), adjustPositionBySide(side, from), adjustPositionBySide(side, to))) {
+            throw new IllegalArgumentException("움직일 수 없습니다.");
+        }
+    }
+
     private static void validateCanMoveSameSidePiece(Side side, Piece fromPiece) {
         if (!fromPiece.isSameSide(side)) {
             throw new IllegalArgumentException("본인 진영의 말만 이동할 수 있습니다.");
@@ -141,14 +146,14 @@ public class Board {
     }
 
     private Position adjustPositionBySide(Side side, Position from) {
-        if (side == Side.HAN) {
+        if (side.isHan()) {
             return Position.rotate180from(from);
         }
         return from;
     }
 
     private Map<Position, Piece> adjustStateBySide(Side side) {
-        if (side == Side.HAN) {
+        if (side.isHan()) {
             return state.entrySet().stream()
                     .collect(Collectors.toMap(
                             entry -> Position.rotate180from(entry.getKey()),

@@ -1,5 +1,6 @@
 package domain.players;
 
+import domain.board.Board;
 import domain.piece.Side;
 import domain.player.Player;
 import domain.position.Move;
@@ -15,18 +16,9 @@ public class Players {
         this.currentTurn = Side.CHO;
     }
 
-    public void initPlacementBySide(Side side, int placementCode) {
-        // if side placement 받아서 side가 한이면
-        if (side == Side.HAN) {
-            hanPlayer.initBoard(placementCode);
-        }
-        if (side == Side.CHO) {
-            choPlayer.initBoard(placementCode);
-        }
-    }
-
-    public BoardResponseDto findBoardState() {
-        return hanPlayer.findBoardState();
+    public void initPlacementBySide(Side side, int placementCode, Board board) {
+        if (side.isHan()) hanPlayer.initBoard(board, placementCode);
+        if (side.isCho()) choPlayer.initBoard(board, placementCode);
     }
 
     public void playTurn(Board board, Move move) {
@@ -36,7 +28,7 @@ public class Players {
     }
 
     private Player getCurrentPlayer() {
-        if (currentTurn == Side.CHO) return choPlayer;
+        if (currentTurn.isCho()) return choPlayer;
         return hanPlayer;
     }
 }
